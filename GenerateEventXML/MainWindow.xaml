@@ -9,7 +9,7 @@
         xmlns:notifications="clr-namespace:Notifications.Wpf.Core.Controls;assembly=Notifications.Wpf.Core"
         d:DataContext="{d:DesignInstance Type=viewmodels:MainViewModel}"
         mc:Ignorable="d"
-        Title="MainWindow" Height="800" Width="800">
+        Title="Event XML Generator" Height="800" Width="800">
   <Grid>
     <!--defines the area where to show the totification toast-->
     <notifications:NotificationArea Panel.ZIndex="10" 
