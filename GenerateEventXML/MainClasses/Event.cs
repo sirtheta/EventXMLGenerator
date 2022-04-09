@@ -1,10 +1,7 @@
-﻿using GenerateEventXML.ViewModels;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GenerateEventXML.MainClasses
 {
@@ -14,28 +11,32 @@ namespace GenerateEventXML.MainClasses
     {
       _selectedLocation = Locations.FirstOrDefault();
       _selectedEventCategorie = EventCategories.FirstOrDefault();
+      _dateTimeStart = DateTime.Now.ToString("dd-MM-yyyy HH:mm");
+      _dateTimeEnd = DateTime.Now.ToString("dd-MM-yyyy HH:mm");
     }
-    
-    public string _selectedLocation;
-    public string _selectedEventCategorie;
+
+    public string? _selectedLocation;
+    public string? _selectedEventCategorie;
+    public string? _dateTimeStart;
+    public string? _dateTimeEnd;
 
     public string? Id { get; set; }
     public string? EventTitle { get; set; }
     public string? Content { get; set; }
     public string? DateTimeStart
     {
-      get { return DateTime.Now.ToString("dd/MM/yyyy HH:mm"); }
+      get { return _dateTimeStart; }
       set
       {
-        _ = value;
+        _dateTimeStart = value;
       }
     }
     public string? DateTimeEnd
     {
-      get { return DateTime.Now.ToString("dd/MM/yyyy HH:mm"); }
+      get { return _dateTimeEnd; }
       set
       {
-        _ = value;
+        _dateTimeEnd = value;
       }
     }
     public List<string>? Locations
@@ -60,12 +61,12 @@ namespace GenerateEventXML.MainClasses
         _ = value;
       }
     }
-    public string SelectedLocation
+    public string? SelectedLocation
     {
       get { return _selectedLocation; }
       set { _selectedLocation = value; }
     }
-    public string SelectedEventCategorie
+    public string? SelectedEventCategorie
     {
       get { return _selectedEventCategorie; }
       set { _selectedEventCategorie = value; }

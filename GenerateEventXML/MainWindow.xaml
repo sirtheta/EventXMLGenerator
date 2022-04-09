@@ -6,11 +6,19 @@
         xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
         xmlns:local="clr-namespace:GenerateEventXML" 
         xmlns:viewmodels="clr-namespace:GenerateEventXML.ViewModels" 
+        xmlns:notifications="clr-namespace:Notifications.Wpf.Core.Controls;assembly=Notifications.Wpf.Core"
         d:DataContext="{d:DesignInstance Type=viewmodels:MainViewModel}"
         mc:Ignorable="d"
         Title="MainWindow" Height="800" Width="800">
   <Grid>
-    <Grid.ColumnDefinitions>
+    <!--defines the area where to show the totification toast-->
+    <notifications:NotificationArea Panel.ZIndex="10" 
+              MaxItems="3"
+              x:Name="WindowArea"
+              Position="BottomRight" Margin="0,0,1,1">
+    </notifications:NotificationArea>
+    <Grid>
+      <Grid.ColumnDefinitions>
       <ColumnDefinition Width="133*"></ColumnDefinition>
       <ColumnDefinition Width="17*"></ColumnDefinition>
     </Grid.ColumnDefinitions>
@@ -36,47 +44,61 @@
               Width="30" 
               Padding="0"/>
     </StackPanel>
+    <Label Content="Eventdaten eingeben" FontSize="20"/>
     <ScrollViewer>
-      <StackPanel>
+      <StackPanel Margin="0,20,0,0">
         <ItemsControl ItemsSource="{Binding Path=EventCollection}">
           <ItemsControl.ItemTemplate>
             <DataTemplate>
-              <StackPanel>
-                <TextBox Text="{Binding Path=EventTitle}" 
+              <Grid Margin="0,20,0,0">
+                <Grid.ColumnDefinitions>
+                  <ColumnDefinition Width="*"></ColumnDefinition>
+                  <ColumnDefinition Width="*"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <StackPanel Grid.Column="0">
+                  <TextBox Text="{Binding Path=EventTitle}" 
                          Margin="10,0,0,0" 
                          materialDesign:HintAssist.Hint="Event Titel" 
-                         HorizontalAlignment="Left"
-                         FontSize="20"/>
-                <TextBox Text="{Binding Path=Content}" 
-                         Margin="10,0,0,0" 
+                         FontSize="20"
+                           TextWrapping="Wrap"
+                           Style="{DynamicResource MaterialDesignOutlinedTextBox}"
+                           HorizontalAlignment="Stretch"/>
+                  <TextBox Text="{Binding Path=Content}" 
+                         Margin="10,10,0,0" 
                          materialDesign:HintAssist.Hint="Event Content" 
-                         HorizontalAlignment="Left"
-                         FontSize="20"/>
-                <TextBox Text="{Binding Path=DateTimeStart}" 
-                         Margin="10,0,0,0" 
+                         FontSize="20"
+                         TextWrapping="Wrap"
+                         Style="{DynamicResource MaterialDesignOutlinedTextBox}"
+                         HorizontalAlignment="Stretch"/>
+                  <TextBox Text="{Binding Path=DateTimeStart}" 
+                         Margin="10,10,0,0" 
                          materialDesign:HintAssist.Hint="Event Date Time Start" 
                          HorizontalAlignment="Left"
                          FontSize="20"/>
-                <TextBox Text="{Binding Path=DateTimeEnd}" 
-                         Margin="10,0,0,0" 
+                  <TextBox Text="{Binding Path=DateTimeEnd}" 
+                         Margin="10,10,0,0" 
                          materialDesign:HintAssist.Hint="Event Date Time End" 
                          HorizontalAlignment="Left"
                          FontSize="20"/>
-                <ComboBox ItemsSource="{Binding Path=Locations}"
+                </StackPanel>
+                <StackPanel Grid.Column="1">
+                  <ComboBox ItemsSource="{Binding Path=Locations}"
                           SelectedItem="{Binding Path=SelectedLocation}"
-                          Margin="10,0,0,0"  
+                          Margin="10,10,0,0"  
                           HorizontalAlignment="Left"
                           FontSize="20"/>
-                <ComboBox ItemsSource="{Binding Path=EventCategories}" 
+                  <ComboBox ItemsSource="{Binding Path=EventCategories}" 
                           SelectedItem="{Binding Path=SelectedEventCategorie}"
-                          Margin="10,0,0,0" 
+                          Margin="10,10,0,0" 
                           HorizontalAlignment="Left"
                           FontSize="20"/>
-              </StackPanel>
+                </StackPanel>
+              </Grid>
             </DataTemplate>
           </ItemsControl.ItemTemplate>
         </ItemsControl>
       </StackPanel>
     </ScrollViewer>
+    </Grid>
   </Grid>
 </Window>

@@ -1,7 +1,8 @@
 ﻿using GenerateEventXML.Commands;
 using GenerateEventXML.Logic;
 using GenerateEventXML.MainClasses;
-using System;
+using Microsoft.Win32;
+using Notifications.Wpf.Core;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows.Input;
@@ -17,11 +18,6 @@ namespace GenerateEventXML.ViewModels
       BtnRemoveOne = new RelayCommand<object>(RemoveTextBox);
       BtnSave = new RelayCommand<object>(OnBtnSaveCmd);
       AddTextBox();
-    }
-
-    private void OnBtnSaveCmd(object obj)
-    {
-      GenerateXML.GenerateXMLFile(EventCollection.ToList());
     }
 
     private ObservableCollection<Event> _eventCollection = new();
@@ -54,7 +50,7 @@ namespace GenerateEventXML.ViewModels
       get;
       private set;
     }
-    
+
     private void AddTextBox(object? parameter = null)
     {
       EventCollection.Add(new Event());
@@ -64,6 +60,29 @@ namespace GenerateEventXML.ViewModels
       if (EventCollection.Count > 1)
       {
         EventCollection.RemoveAt(EventCollection.Count - 1);
+      }
+    }
+
+    private void OnBtnSaveCmd(object obj)
+    {
+      bool retVal = false;
+      SaveAndExportEvents sae = new();
+      SaveFileDialog saveFileDialog = new()
+      {
+        Filter = "ZIP files (*.zip)|*.zip"
+      };
+      if (saveFileDialog.ShowDialog() == true)
+      {
+        var fileName = saveFileDialog.FileName;
+        retVal = sae.SaveAndExport(EventCollection.ToList(), fileName);
+      }
+      if (retVal)
+      {
+        ShowNotification("Success", "Events saved successfully", NotificationType.Success);
+      }
+      else
+      {
+        ShowNotification("Error", "Events not saved", NotificationType.Error);
       }
     }
   }
