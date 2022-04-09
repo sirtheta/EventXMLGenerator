@@ -11,8 +11,8 @@ namespace GenerateEventXML.MainClasses
     {
       _selectedLocation = Locations.FirstOrDefault();
       _selectedEventCategorie = EventCategories.FirstOrDefault();
-      _dateTimeStart = DateTime.Now.ToString("dd-MM-yyyy HH:mm");
-      _dateTimeEnd = DateTime.Now.ToString("dd-MM-yyyy HH:mm");
+      _dateTimeStart = DateTime.Now.ToString("dd-MM-yyyy") + " 09:30";
+      _dateTimeEnd = DateTime.Now.ToString("dd-MM-yyyy") + " 12:00";
     }
 
     public string? _selectedLocation;
@@ -39,7 +39,10 @@ namespace GenerateEventXML.MainClasses
         _dateTimeEnd = value;
       }
     }
-    public List<string>? Locations
+    /// <summary>
+    /// List of Locations from app.config
+    /// </summary>
+    public static List<string> Locations
     {
       get
       {
@@ -50,7 +53,10 @@ namespace GenerateEventXML.MainClasses
         _ = value;
       }
     }
-    public List<string>? EventCategories
+    /// <summary>
+    /// List of EventCategories from app.config
+    /// </summary>
+    public static List<string> EventCategories
     {
       get
       {
@@ -72,6 +78,10 @@ namespace GenerateEventXML.MainClasses
       set { _selectedEventCategorie = value; }
     }
 
+    /// <summary>
+    /// read "EventCategorie" keys from app.config
+    /// </summary>
+    /// <returns></returns>
     private static List<string> ReadAllEventCategories()
     {
       List<string> categories = new();
@@ -80,13 +90,19 @@ namespace GenerateEventXML.MainClasses
       {
         if (key != null && key.StartsWith("EventCategorie"))
         {
+#pragma warning disable CS8604 // Possible null reference argument.
           categories.Add(ConfigurationManager.AppSettings[key]);
+#pragma warning restore CS8604 // Possible null reference argument.
         }
       }
 
       return categories;
     }
 
+    /// <summary>
+    /// read "Location" keys from app.config
+    /// </summary>
+    /// <returns></returns>
     private static List<string> ReadAllLocations()
     {
       List<string> locations = new();
@@ -95,7 +111,9 @@ namespace GenerateEventXML.MainClasses
       {
         if (key != null && key.StartsWith("Location"))
         {
+#pragma warning disable CS8604 // Possible null reference argument.
           locations.Add(ConfigurationManager.AppSettings[key]);
+#pragma warning restore CS8604 // Possible null reference argument.
         }
       }
 

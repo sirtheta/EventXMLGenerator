@@ -14,6 +14,7 @@ namespace GenerateEventXML.Logic
     private string? _template;
     private readonly string _fileName = "Veranstaltungen " + DateTime.Today.ToString("dd-MMMM-yyyy");
 
+    
     public bool SaveAndExport(List<Event> events, string fileName)
     {
       var tempPath = Path.GetTempPath() + "\\eventExport\\bundle\\_\\";
@@ -26,12 +27,18 @@ namespace GenerateEventXML.Logic
       DeleteTempFiles();
       return retVal;
     }
-
+    /// <summary>
+    /// Delete all temporary generated files
+    /// </summary>
     private static void DeleteTempFiles()
     {
       Directory.Delete(Path.GetTempPath() + "eventExport", true);
     }
 
+    /// <summary>
+    /// Import needs an Template. This can be defined in app.config
+    /// </summary>
+    /// <returns></returns>
     private bool ReadTemplateFromJSon()
     {
       bool retVal = false;

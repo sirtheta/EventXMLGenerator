@@ -8,7 +8,12 @@ namespace GenerateEventXML.Logic
 {
   internal class GenerateXML
   {
-    //Generate XML-File with XML text writer
+    /// <summary>
+    /// Generate XML-File with XML text writer
+    /// </summary>
+    /// <param name="events"></param>
+    /// <param name="fileName"></param>
+    /// <returns></returns>
     public static bool GenerateXMLFile(List<Event> events, string fileName)
     {
       bool retVal = false;
@@ -28,6 +33,7 @@ namespace GenerateEventXML.Logic
         //Write all events to XML-File
         foreach (Event e in events)
         {
+          //contains all data for one event
           _idCounter++;
           writer.WriteStartElement("post");
           writer.WriteElementString("identifyer", _idCounter.ToString());
@@ -39,7 +45,6 @@ namespace GenerateEventXML.Logic
           writer.WriteElementString("imic_featured_event", "no");
           writer.WriteElementString("imic_event_start_dt", e.DateTimeStart);
           writer.WriteElementString("imic_event_end_dt", e.DateTimeEnd);
-
           writer.WriteElementString("imic_google_map_track", "0");
           writer.WriteElementString("imic_event_registration", "0");
           writer.WriteElementString("imic_custom_event_registration_target", "0");

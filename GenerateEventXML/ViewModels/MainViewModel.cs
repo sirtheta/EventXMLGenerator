@@ -3,6 +3,8 @@ using GenerateEventXML.Logic;
 using GenerateEventXML.MainClasses;
 using Microsoft.Win32;
 using Notifications.Wpf.Core;
+using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows.Input;
@@ -65,25 +67,69 @@ namespace GenerateEventXML.ViewModels
 
     private void OnBtnSaveCmd(object obj)
     {
-      bool retVal = false;
-      SaveAndExportEvents sae = new();
-      SaveFileDialog saveFileDialog = new()
+      //do not add events without titel
+      List<Event> events = new();
+      foreach (var item in EventCollection)
       {
-        Filter = "ZIP files (*.zip)|*.zip"
-      };
-      if (saveFileDialog.ShowDialog() == true)
-      {
-        var fileName = saveFileDialog.FileName;
-        retVal = sae.SaveAndExport(EventCollection.ToList(), fileName);
+        if (item.EventTitle != null)
+        {
+          events.Add(item);
+        }
       }
-      if (retVal)
+
+      if (events.Count > 0 && ValidateDateTime())
       {
-        ShowNotification("Success", "Events saved successfully", NotificationType.Success);
+        //open filedialog to save file
+        SaveAndExportEvents sae = new();
+        SaveFileDialog saveFileDialog = new()
+        {
+          Filter = "ZIP files (*.zip)|*.zip"
+        };
+
+        if (saveFileDialog.ShowDialog() == true)
+        {
+          var fileName = saveFileDialog.FileName;
+          if (sae.SaveAndExport(events, fileName))
+          {
+            ShowNotification("Success", "Events saved successfully", NotificationType.Success);
+          }
+        }
       }
       else
       {
         ShowNotification("Error", "Events not saved", NotificationType.Error);
       }
+    }
+    /// <summary>
+    /// Validates DateTime Entry. If DateTime is not valid, it will throw an error notification
+    /// </summary>
+    /// <returns></returns>
+    private bool ValidateDateTime()
+    {
+      bool retVal = false;
+      foreach (var item in EventCollection)
+      {
+        try
+        {
+          if (item.DateTimeStart != null && item.DateTimeEnd != null)
+          {
+            DateTime.Parse(item.DateTimeStart);
+            DateTime.Parse(item.DateTimeEnd);
+            retVal = true;
+          }
+          else
+          {
+            ShowNotification("Error", "Datum ist NULL!", NotificationType.Error);
+            retVal = false;
+          }
+        }
+        catch (Exception)
+        {
+          ShowNotification("Error", "Datum nicht korrekt eingegeben!", NotificationType.Error);
+          retVal = false;
+        }
+      }
+      return retVal;
     }
   }
 }

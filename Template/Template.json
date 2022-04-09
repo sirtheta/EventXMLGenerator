@@ -1,0 +1,169 @@
+{
+  "event": [
+    {
+      "name": "Veranstaltungen Export - 2022 April 09 14:20",
+      "is_keep_linebreaks": 1,
+      "is_leave_html": 0,
+      "fix_characters": 0,
+      "options": {
+        "type": "post",
+        "wizard_type": "new",
+        "deligate": "wpallexport",
+        "custom_type": "event",
+        "status": "xpath",
+        "is_multiple_page_parent": "no",
+        "unique_key": "{identifyer[1]}",
+        "acf": [],
+        "fields": [],
+        "is_multiple_field_value": [],
+        "multiple_value": [],
+        "fields_delimiter": [],
+        "update_all_data": "yes",
+        "is_update_status": 1,
+        "is_update_title": 1,
+        "is_update_author": 1,
+        "is_update_slug": 1,
+        "is_update_content": 1,
+        "is_update_excerpt": 1,
+        "is_update_dates": 1,
+        "is_update_menu_order": 1,
+        "is_update_parent": 1,
+        "is_update_attachments": 1,
+        "is_update_acf": 1,
+        "is_update_comment_status": 0,
+        "import_img_tags": 1,
+        "update_acf_logic": "full_update",
+        "acf_list": "",
+        "is_update_product_type": 1,
+        "is_update_attributes": 1,
+        "update_attributes_logic": "full_update",
+        "attributes_list": "",
+        "is_update_images": 1,
+        "is_update_custom_fields": 1,
+        "update_custom_fields_logic": "full_update",
+        "custom_fields_list": "",
+        "is_update_categories": 1,
+        "update_categories_logic": "full_update",
+        "taxonomies_list": "",
+        "export_id": "10",
+        "title": "{Title[1]}",
+        "single_product_id_first_is_variation": "{Title[1]}",
+        "content": "{Content[1]}",
+        "tax_assing": {
+          "event-category": 1
+        },
+        "tax_logic": {
+          "event-category": "hierarchical"
+        },
+        "tax_hierarchical_logic_entire": {
+          "event-category": 1
+        },
+        "multiple_term_assing": {
+          "event-category": 1
+        },
+        "tax_hierarchical_delim": {
+          "event-category": ">"
+        },
+        "is_tax_hierarchical_group_delim": {
+          "event-category": 1
+        },
+        "tax_hierarchical_group_delim": {
+          "event-category": "|"
+        },
+        "tax_hierarchical_xpath": {
+          "event-category": [
+            "{EventCategories[1]}"
+          ]
+        },
+        "custom_name": [
+          "imic_strict_no_sidebar",
+          "imic_sidebar_columns_layout",
+          "imic_featured_event",
+          "imic_event_start_dt",
+          "imic_event_end_dt",
+          "imic_google_map_track",
+          "imic_event_registration",
+          "imic_custom_event_registration_target",
+          "imic_event_frequency_type",
+          "imic_event_day_month",
+          "imic_event_week_day",
+          "imic_event_frequency",
+          "imic_pages_Choose_slider_display",
+          "imic_pages_banner_overlay",
+          "imic_pages_banner_animation",
+          "imic_pages_select_revolution_from_list",
+          "imic_pages_slider_pagination",
+          "imic_pages_slider_auto_slide",
+          "imic_pages_slider_direction_arrows",
+          "imic_pages_slider_interval",
+          "imic_pages_slider_effects",
+          "imic_pages_nivo_effects",
+          "adore_ticket_status",
+          "imic_event_frequency_end",
+          "imic_event_address2",
+          "_last_editor_used_jetpack"
+        ],
+        "custom_value": [
+          "{imic_strict_no_sidebar[1]}",
+          "{imic_sidebar_columns_layout[1]}",
+          "{imic_featured_event[1]}",
+          "{imic_event_start_dt[1]}",
+          "{imic_event_end_dt[1]}",
+          "{imic_google_map_track[1]}",
+          "{imic_event_registration[1]}",
+          "{imic_custom_event_registration_target[1]}",
+          "{imic_event_frequency_type[1]}",
+          "{imic_event_day_month[1]}",
+          "{imic_event_week_day[1]}",
+          "{imic_event_frequency[1]}",
+          "{imic_pages_Choose_slider_display[1]}",
+          "{imic_pages_banner_overlay[1]}",
+          "{imic_pages_banner_animation[1]}",
+          "{imic_pages_select_revolution_from_list[1]}",
+          "{imic_pages_slider_pagination[1]}",
+          "{imic_pages_slider_auto_slide[1]}",
+          "{imic_pages_slider_direction_arrows[1]}",
+          "{imic_pages_slider_interval[1]}",
+          "{imic_pages_slider_effects[1]}",
+          "{imic_pages_nivo_effects[1]}",
+          "{adore_ticket_status[1]}",
+          "{imic_event_frequency_end[1]}",
+          "{imic_event_address2[1]}",
+          "{_last_editor_used_jetpack[1]}"
+        ],
+        "custom_format": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "status_xpath": "{Status[1]}",
+        "required_add_ons": [],
+        "root_element": "post"
+      },
+      "source_file_name": "Veranstaltungen-Export-2022-April-09-1420.xml"
+    }
+  ]
+}
