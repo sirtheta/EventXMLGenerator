@@ -14,7 +14,7 @@ namespace GenerateEventXML.Logic
     private string? _template;
     private readonly string _fileName = "Veranstaltungen " + DateTime.Today.ToString("dd-MMMM-yyyy");
 
-    
+
     public bool SaveAndExport(List<Event> events, string fileName)
     {
       var tempPath = Path.GetTempPath() + "\\eventExport\\bundle\\_\\";
@@ -48,8 +48,8 @@ namespace GenerateEventXML.Logic
         if (!string.IsNullOrEmpty(templatePath))
         {
           _template = File.ReadAllText(templatePath);
+          retVal = true;
         }
-        retVal = true;
       }
       catch (Exception e)
       {
@@ -71,8 +71,8 @@ namespace GenerateEventXML.Logic
             jsonObj["event"][0]["name"] = _fileName;
             jsonObj["event"][0]["source_file_name"] = _fileName + ".xml";
             File.WriteAllText(tempPath + "WP All Import Template - " + _fileName + ".txt", JsonConvert.SerializeObject(jsonObj, Formatting.None));
+            retVal = true;
           }
-          retVal = true;
         }
         catch (Exception e)
         {
@@ -87,12 +87,12 @@ namespace GenerateEventXML.Logic
       bool retVal = false;
 
       var path = Path.GetTempPath() + "eventExport";
-      if (File.Exists(outPath))
-      {
-        File.Delete(outPath);
-      }
       try
       {
+        if (File.Exists(outPath))
+        {
+          File.Delete(outPath);
+        }
         ZipFile.CreateFromDirectory(path, outPath);
         retVal = true;
       }
