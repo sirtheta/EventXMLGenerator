@@ -17,13 +17,13 @@ namespace GenerateEventXML.MainClasses
 
     public string? _selectedLocation;
     public string? _selectedEventCategorie;
-    public string? _dateTimeStart;
-    public string? _dateTimeEnd;
+    public string _dateTimeStart;
+    public string _dateTimeEnd;
 
     public string? Id { get; set; }
     public string? EventTitle { get; set; }
     public string? Content { get; set; }
-    public string? DateTimeStart
+    public string DateTimeStart
     {
       get { return _dateTimeStart; }
       set
@@ -31,7 +31,7 @@ namespace GenerateEventXML.MainClasses
         _dateTimeStart = value;
       }
     }
-    public string? DateTimeEnd
+    public string DateTimeEnd
     {
       get { return _dateTimeEnd; }
       set

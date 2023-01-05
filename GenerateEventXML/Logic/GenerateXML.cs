@@ -43,8 +43,8 @@ namespace GenerateEventXML.Logic
           writer.WriteElementString("imic_strict_no_sidebar", "0");
           writer.WriteElementString("imic_sidebar_columns_layout", "3");
           writer.WriteElementString("imic_featured_event", "no");
-          writer.WriteElementString("imic_event_start_dt", e.DateTimeStart);
-          writer.WriteElementString("imic_event_end_dt", e.DateTimeEnd);
+          writer.WriteElementString("imic_event_start_dt", DateTime.Parse(e.DateTimeStart).ToString("yyyy-MM-dd HH:mm"));
+          writer.WriteElementString("imic_event_end_dt", DateTime.Parse(e.DateTimeEnd).ToString("yyyy-MM-dd HH:mm"));
           writer.WriteElementString("imic_google_map_track", "0");
           writer.WriteElementString("imic_event_registration", "0");
           writer.WriteElementString("imic_custom_event_registration_target", "0");
