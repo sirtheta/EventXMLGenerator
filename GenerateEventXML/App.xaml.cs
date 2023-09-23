@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using GenerateEventXML.Logic;
+using System.Windows;
 
 namespace GenerateEventXML
 {
@@ -7,5 +8,10 @@ namespace GenerateEventXML
   /// </summary>
   public partial class App : Application
   {
+    protected override void OnStartup(StartupEventArgs e)
+    {
+      base.OnStartup(e);
+      ConfigData.ReadConfigData();
+    }
   }
 }

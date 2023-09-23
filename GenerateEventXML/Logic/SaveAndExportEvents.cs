@@ -14,7 +14,12 @@ namespace GenerateEventXML.Logic
     private string? _template;
     private readonly string _fileName = "Veranstaltungen " + DateTime.Today.ToString("dd-MMMM-yyyy");
 
-
+    /// <summary>
+    /// Will export the eventlist to a zip file
+    /// </summary>
+    /// <param name="events"></param>
+    /// <param name="fileName"></param>
+    /// <returns></returns>
     public bool SaveAndExport(List<Event> events, string fileName)
     {
       var tempPath = Path.GetTempPath() + "\\eventExport\\bundle\\_\\";
@@ -58,6 +63,11 @@ namespace GenerateEventXML.Logic
       return retVal;
     }
 
+    /// <summary>
+    /// Generate the Json from the import template
+    /// </summary>
+    /// <param name="tempPath"></param>
+    /// <returns></returns>
     private bool GenerateJSonWithTemplate(string tempPath)
     {
       bool retVal = false;
@@ -82,6 +92,11 @@ namespace GenerateEventXML.Logic
       return retVal;
     }
 
+    /// <summary>
+    /// Creates the zip file
+    /// </summary>
+    /// <param name="outPath"></param>
+    /// <returns></returns>
     private static bool CreateZipFile(string outPath)
     {
       bool retVal = false;

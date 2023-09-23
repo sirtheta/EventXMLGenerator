@@ -1,6 +1,6 @@
-﻿using System;
+﻿using GenerateEventXML.Logic;
+using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Linq;
 
 namespace GenerateEventXML.MainClasses
@@ -11,21 +11,20 @@ namespace GenerateEventXML.MainClasses
     {
       _selectedLocation = Locations.FirstOrDefault();
       _selectedEventCategorie = EventCategories.FirstOrDefault();
-      _dateTimeStart = DateTime.Now.ToString("dd-MM-yyyy") + " 09:30";
-      _dateTimeEnd = DateTime.Now.ToString("dd-MM-yyyy") + " 12:00";
+      _dateTimeStart = DateTime.Now.ToString(ConfigData.DateFormat) + " 09:30";
+      _dateTimeEnd = DateTime.Now.ToString(ConfigData.DateFormat) + " 12:00";
     }
 
-    public string? _selectedLocation;
-    public string? _selectedEventCategorie;
-    public string _dateTimeStart;
-    public string _dateTimeEnd;
+    private string? _selectedLocation;
+    private string? _selectedEventCategorie;
+    private string _dateTimeStart;
+    private string _dateTimeEnd;
 
-    public string? Id { get; set; }
     public string? EventTitle { get; set; }
     public string? Content { get; set; }
     public string DateTimeStart
     {
-      get { return _dateTimeStart; }
+      get => _dateTimeStart; 
       set
       {
         _dateTimeStart = value;
@@ -33,35 +32,33 @@ namespace GenerateEventXML.MainClasses
     }
     public string DateTimeEnd
     {
-      get { return _dateTimeEnd; }
+      get => _dateTimeEnd;
       set
       {
         _dateTimeEnd = value;
       }
     }
+
+    public bool ToDeleteSelected { get; set; } = false;
+
     /// <summary>
     /// List of Locations from app.config
     /// </summary>
     public static List<string> Locations
     {
-      get
-      {
-        return ReadAllLocations();
-      }
+      get => ConfigData.Locations;
       set
       {
         _ = value;
       }
     }
+
     /// <summary>
     /// List of EventCategories from app.config
     /// </summary>
     public static List<string> EventCategories
     {
-      get
-      {
-        return ReadAllEventCategories();
-      }
+      get => ConfigData.Categories;
       set
       {
         _ = value;
@@ -74,51 +71,8 @@ namespace GenerateEventXML.MainClasses
     }
     public string? SelectedEventCategorie
     {
-      get { return _selectedEventCategorie; }
+      get => _selectedEventCategorie;
       set { _selectedEventCategorie = value; }
     }
-
-    /// <summary>
-    /// read "EventCategorie" keys from app.config
-    /// </summary>
-    /// <returns></returns>
-    private static List<string> ReadAllEventCategories()
-    {
-      List<string> categories = new();
-
-      foreach (var key in ConfigurationManager.AppSettings.AllKeys)
-      {
-        if (key != null && key.StartsWith("EventCategorie"))
-        {
-#pragma warning disable CS8604 // Possible null reference argument.
-          categories.Add(ConfigurationManager.AppSettings[key]);
-#pragma warning restore CS8604 // Possible null reference argument.
-        }
-      }
-
-      return categories;
-    }
-
-    /// <summary>
-    /// read "Location" keys from app.config
-    /// </summary>
-    /// <returns></returns>
-    private static List<string> ReadAllLocations()
-    {
-      List<string> locations = new();
-
-      foreach (var key in ConfigurationManager.AppSettings.AllKeys)
-      {
-        if (key != null && key.StartsWith("Location"))
-        {
-#pragma warning disable CS8604 // Possible null reference argument.
-          locations.Add(ConfigurationManager.AppSettings[key]);
-#pragma warning restore CS8604 // Possible null reference argument.
-        }
-      }
-
-      return locations;
-    }
-
   }
 }

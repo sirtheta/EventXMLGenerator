@@ -1,27 +1,17 @@
 ﻿using Notifications.Wpf.Core;
 using System;
-using System.ComponentModel;
-using System.Runtime.CompilerServices;
-using System.Windows;
+using TestCaseExecutor.Common;
 
 namespace GenerateEventXML.ViewModels
 {
-  internal abstract class BaseViewModel : DependencyObject, INotifyPropertyChanged
+  internal abstract class BaseViewModel : Notify
   {
 
-    internal static void ShowNotification(string titel, string message, NotificationType type)
+    internal static void ShowNotification(string titel, string message, NotificationType type, int displayTime = 2)
     {
       var notificationManager = new NotificationManager();
       notificationManager.ShowAsync(new NotificationContent { Title = titel, Message = message, Type = type },
-              areaName: "WindowArea", expirationTime: new TimeSpan(0, 0, 2));
+              areaName: "WindowArea", expirationTime: new TimeSpan(0, 0, displayTime));
     }
-
-    public event PropertyChangedEventHandler? PropertyChanged;
-
-    protected void OnPropertyChanged([CallerMemberName] string? propertyName = null)
-    {
-      PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-    }
-
   }
 }

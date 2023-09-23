@@ -6,6 +6,8 @@ using Notifications.Wpf.Core;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Windows.Input;
 
@@ -17,9 +19,9 @@ namespace GenerateEventXML.ViewModels
     public MainViewModel()
     {
       BtnAddOne = new RelayCommand<object>(AddTextBox);
-      BtnRemoveOne = new RelayCommand<object>(RemoveTextBox);
+      BtnRemoveEvent = new RelayCommand<object>(RemoveEvent);
       BtnSave = new RelayCommand<object>(OnBtnSaveCmd);
-      AddTextBox();
+      BtnOpen = new RelayCommand<object>(OnBtnOpenCmd);      
     }
 
     private ObservableCollection<Event> _eventCollection = new();
@@ -35,13 +37,17 @@ namespace GenerateEventXML.ViewModels
       }
     }
 
+    private string _dateTimeStartImport = DateTime.Now.ToString(ConfigData.DateFormat);
+    private string _copyright = $"Copyright © {DateTime.Now.Year} nemicomp. All rights reserved. Developed and designed by Michael Neuhaus, licensed under the MIT license. Version: {GetVersion()}";
+    public string Copyright { get => _copyright; set => _copyright = value; }
+
     public ICommand BtnAddOne
     {
       get;
       private set;
     }
 
-    public ICommand BtnRemoveOne
+    public ICommand BtnRemoveEvent
     {
       get;
       private set;
@@ -52,21 +58,84 @@ namespace GenerateEventXML.ViewModels
       get;
       private set;
     }
+    public ICommand BtnOpen
+    {
+      get;
+      private set;
+    }
+
+    public string DateTimeStartImport
+    {
+      get => _dateTimeStartImport;
+        set
+      {
+        _dateTimeStartImport = value;
+      }
+    }
+
+
+    private static string? GetVersion()
+    {
+      return System.Reflection.Assembly.GetEntryAssembly()?.GetName()?.Version?.ToString();
+    }
 
     private void AddTextBox(object? parameter = null)
     {
       EventCollection.Add(new Event());
     }
-    private void RemoveTextBox(object obj)
+
+    /// <summary>
+    /// removes all selected events in the collection
+    /// </summary>
+    /// <param name="obj"></param>
+    private void RemoveEvent(object obj)
     {
-      if (EventCollection.Count > 1)
+      var eventsToRemove = EventCollection.Where(e => e.ToDeleteSelected).ToList();
+
+      foreach (var e in eventsToRemove)
       {
-        EventCollection.RemoveAt(EventCollection.Count - 1);
+        EventCollection.Remove(e);
       }
     }
 
+    /// <summary>
+    /// Opens a file dialog to select the ics file
+    /// will clear current events in the list!
+    /// </summary>
+    /// <param name="obj"></param>
+    private void OnBtnOpenCmd(object obj)
+    {
+      OpenFileDialog dlg = new()
+      {
+        Filter = "ical files (*.ics)|*.ics"
+      };
+
+      if (dlg.ShowDialog() == true)
+      {
+        var startImportDate = DateTime.Now;
+        try
+        {
+          startImportDate = DateTime.ParseExact(DateTimeStartImport, ConfigData.DateFormat, CultureInfo.InvariantCulture);
+        }
+        catch (Exception)
+        {
+          ShowNotification("Warning", "Import start date not correct! Taking today", NotificationType.Warning, 5);
+        }
+        EventCollection.Clear();
+        foreach (var entry in IcalImportHandler.ImportFile(File.ReadAllText(dlg.FileName), startImportDate, ConfigData.ImportKeyword))
+        {
+          EventCollection.Add(entry);
+        }
+      }
+    }
+
+    /// <summary>
+    /// Saves the event list to a zip file to import in wordpress
+    /// </summary>
+    /// <param name="obj"></param>
     private void OnBtnSaveCmd(object obj)
     {
+      bool showError = true;
       //do not add events without titel
       List<Event> events = new();
       foreach (var item in EventCollection)
@@ -92,12 +161,13 @@ namespace GenerateEventXML.ViewModels
           if (sae.SaveAndExport(events, fileName))
           {
             ShowNotification("Success", "Events saved successfully", NotificationType.Success);
+            showError = false;
           }
         }
       }
-      else
+      if  (showError)
       {
-        ShowNotification("Error", "Events not saved", NotificationType.Error);
+        ShowNotification("Error", "Events not saved", NotificationType.Error, 5);
       }
     }
     /// <summary>
@@ -119,14 +189,15 @@ namespace GenerateEventXML.ViewModels
           }
           else
           {
-            ShowNotification("Error", "Datum ist NULL!", NotificationType.Error);
+            ShowNotification("Error", "Datum ist NULL!", NotificationType.Error, 5);
             retVal = false;
           }
         }
         catch (Exception)
         {
-          ShowNotification("Error", "Datum nicht korrekt eingegeben!", NotificationType.Error);
+          ShowNotification("Error", "Datum nicht korrekt eingegeben!", NotificationType.Error, 5);
           retVal = false;
+          break;
         }
       }
       return retVal;
