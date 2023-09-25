@@ -23,7 +23,7 @@ namespace GenerateEventXML.Logic
       var calendar = Ical.Net.Calendar.Load(icalText);
 
       foreach (var calendarEvent in calendar.Events)
-      {  
+      {
         if (calendarEvent.DtStart.Value < startTime)
           continue;
 

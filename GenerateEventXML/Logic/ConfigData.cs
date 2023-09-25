@@ -19,9 +19,9 @@ namespace GenerateEventXML.Logic
     }
 
     internal static List<string> Locations
-    { 
-      get; 
-      private set; 
+    {
+      get;
+      private set;
     }
 
     internal static List<string> Categories
@@ -76,7 +76,7 @@ namespace GenerateEventXML.Logic
 #pragma warning restore CS8604 // Possible null reference argument.
         }
       }
-     Categories = categories;
+      Categories = categories;
     }
 
 #pragma warning disable CS8601 // Possible null reference argument.

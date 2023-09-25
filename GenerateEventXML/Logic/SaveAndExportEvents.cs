@@ -1,4 +1,5 @@
 ﻿using GenerateEventXML.MainClasses;
+using Microsoft.Win32;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -20,7 +21,7 @@ namespace GenerateEventXML.Logic
     /// <param name="events"></param>
     /// <param name="fileName"></param>
     /// <returns></returns>
-    public bool SaveAndExport(List<Event> events, string fileName)
+    public bool SaveAndExport(IEnumerable<Event> events, string fileName)
     {
       var tempPath = Path.GetTempPath() + "\\eventExport\\bundle\\_\\";
       Directory.CreateDirectory(tempPath);
@@ -31,13 +32,6 @@ namespace GenerateEventXML.Logic
       retVal &= CreateZipFile(fileName);
       DeleteTempFiles();
       return retVal;
-    }
-    /// <summary>
-    /// Delete all temporary generated files
-    /// </summary>
-    private static void DeleteTempFiles()
-    {
-      Directory.Delete(Path.GetTempPath() + "eventExport", true);
     }
 
     /// <summary>
@@ -93,6 +87,14 @@ namespace GenerateEventXML.Logic
     }
 
     /// <summary>
+    /// Delete all temporary generated files
+    /// </summary>
+    private static void DeleteTempFiles()
+    {
+      Directory.Delete(Path.GetTempPath() + "eventExport", true);
+    }
+
+    /// <summary>
     /// Creates the zip file
     /// </summary>
     /// <param name="outPath"></param>
@@ -116,6 +118,72 @@ namespace GenerateEventXML.Logic
         Debug.WriteLine(e.Message);
       }
       return retVal;
+    }
+
+    /// <summary>
+    /// Saves the event list to a zip file to import in wordpress
+    /// </summary>
+    /// <param name="eventCollection"></param>
+    /// <returns></returns>
+    internal static bool SaveEvent(IEnumerable<Event> eventCollection)
+    {
+      bool success = false;
+      //do not add events without titel
+      List<Event> events = new();
+      foreach (var item in eventCollection)
+      {
+        if (item.EventTitle != null)
+        {
+          events.Add(item);
+        }
+      }
+
+      if (events.Count > 0 && ValidateDateTime(eventCollection))
+      {
+        //open filedialog to save file
+        SaveFileDialog saveFileDialog = new()
+        {
+          Filter = "ZIP files (*.zip)|*.zip"
+        };
+
+        if (saveFileDialog.ShowDialog() == true)
+        {
+          SaveAndExportEvents sae = new();
+          var fileName = saveFileDialog.FileName;
+          if (sae.SaveAndExport(events, fileName))
+          {
+            success = true;
+          }
+        }
+      }
+      return success;
+    }
+    /// <summary>
+    /// Validates DateTime Entry. If DateTime is not valid, it will return success false
+    /// </summary>
+    /// <param name="eventCollection"></param>
+    /// <returns></returns>
+    internal static bool ValidateDateTime(IEnumerable<Event> eventCollection)
+    {
+      bool success = false;
+      foreach (var item in eventCollection)
+      {
+        try
+        {
+          if (item.DateTimeStart != null && item.DateTimeEnd != null)
+          {
+            DateTime.Parse(item.DateTimeStart);
+            DateTime.Parse(item.DateTimeEnd);
+            success = true;
+          }
+        }
+        catch (Exception e)
+        {
+          Debug.WriteLine(e.Message);
+          break;
+        }
+      }
+      return success;
     }
   }
 }

@@ -10,8 +10,8 @@
         d:DataContext="{d:DesignInstance Type=viewmodels:MainViewModel}"
         mc:Ignorable="d"
         Title="Event XML Generator" 
-        Height="800" Width="800"
-        MinHeight="800" MinWidth="800">
+        Height="850" Width="850"
+        MinHeight="800" MinWidth="850">
   <Grid>
     <!--defines the area where to show the totification toast-->
     <notifications:NotificationArea Panel.ZIndex="10" 
@@ -53,13 +53,6 @@
                 Height="30" 
                 Width="30" 
                 Padding="0"/>
-        <Button Content="{materialDesign:PackIcon Kind=Garbage,Size=30}"  
-                Command="{Binding BtnRemoveEvent}"
-                ToolTip="Remove selected event(s)"
-                Margin="0,0,5,0"                
-                Height="30" 
-                Width="30" 
-                Padding="0"/>
         <TextBlock Text="Import start date:"
                    HorizontalAlignment="Center"
                    VerticalAlignment="Center"
@@ -75,7 +68,7 @@
           <ItemsControl ItemsSource="{Binding Path=EventCollection}">
             <ItemsControl.ItemTemplate>
               <DataTemplate>
-                <Grid Margin="0,20,0,0">
+                <Grid ShowGridLines="True" Margin="0,20,0,0">
                   <Grid.Style>
                     <Style TargetType="Grid">
                       <Setter Property="Background" Value="Transparent" />
@@ -87,17 +80,18 @@
                     </Style>
                   </Grid.Style>
                   <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"></ColumnDefinition>
+                    <ColumnDefinition Width="400"></ColumnDefinition>
                     <ColumnDefinition Width="*"></ColumnDefinition>
                   </Grid.ColumnDefinitions>
                   <StackPanel Grid.Column="0">
-                    <StackPanel Orientation="Horizontal" Margin="0,0,0,10">
-                    <TextBlock Text="Delete"
-                               Margin="10,0,0,0"
-                               FontSize="13"/>
-                    <CheckBox IsChecked="{Binding ToDeleteSelected}"
-                              Margin="10,0,0,0"/>
-                    </StackPanel>
+                    <Button Content="{materialDesign:PackIcon Kind=Garbage,Size=30}"  
+                            Command="{Binding BtnDeleteEventCklicked}"
+                            ToolTip="Remove event"
+                            Margin="15,3,0,15"                
+                            Height="30" 
+                            Width="30" 
+                            HorizontalAlignment="Left"
+                            Padding="0"/>
                     <TextBox Text="{Binding Path=EventTitle}" 
                              Margin="10,0,0,0" 
                              Width="370"
@@ -127,7 +121,7 @@
                              HorizontalAlignment="Left"
                              FontSize="20"/>
                   </StackPanel>
-                  <StackPanel Grid.Column="1">
+                  <StackPanel Grid.Column="1" Margin="0,30,0,0">
                     <ComboBox ItemsSource="{Binding Path=Locations}"
                               SelectedItem="{Binding Path=SelectedLocation}"
                               Margin="10,10,0,0"  

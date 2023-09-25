@@ -1,11 +1,14 @@
-﻿using GenerateEventXML.Logic;
+﻿using GenerateEventXML.Commands;
+using GenerateEventXML.Logic;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Windows.Input;
+using TestCaseExecutor.Common;
 
 namespace GenerateEventXML.MainClasses
 {
-  internal class Event
+  internal class Event : Notify
   {
     public Event()
     {
@@ -13,6 +16,7 @@ namespace GenerateEventXML.MainClasses
       _selectedEventCategorie = EventCategories.FirstOrDefault();
       _dateTimeStart = DateTime.Now.ToString(ConfigData.DateFormat) + " 09:30";
       _dateTimeEnd = DateTime.Now.ToString(ConfigData.DateFormat) + " 12:00";
+      BtnDeleteEventCklicked = new RelayCommand<object>(BtnDeleteEventExecute);
     }
 
     private string? _selectedLocation;
@@ -20,11 +24,20 @@ namespace GenerateEventXML.MainClasses
     private string _dateTimeStart;
     private string _dateTimeEnd;
 
+    public ICommand BtnDeleteEventCklicked { get; private set; }
+
+    internal EventHandler? DeleteEventClicked;
+    private void BtnDeleteEventExecute(object obj)
+    {
+      ToDeleteSelected = true;
+      DeleteEventClicked?.Invoke(this, EventArgs.Empty);
+    }
+
     public string? EventTitle { get; set; }
     public string? Content { get; set; }
     public string DateTimeStart
     {
-      get => _dateTimeStart; 
+      get => _dateTimeStart;
       set
       {
         _dateTimeStart = value;
@@ -38,7 +51,6 @@ namespace GenerateEventXML.MainClasses
         _dateTimeEnd = value;
       }
     }
-
     public bool ToDeleteSelected { get; set; } = false;
 
     /// <summary>

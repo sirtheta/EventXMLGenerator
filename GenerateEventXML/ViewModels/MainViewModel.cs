@@ -4,8 +4,8 @@ using GenerateEventXML.MainClasses;
 using Microsoft.Win32;
 using Notifications.Wpf.Core;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -19,9 +19,9 @@ namespace GenerateEventXML.ViewModels
     public MainViewModel()
     {
       BtnAddOne = new RelayCommand<object>(AddTextBox);
-      BtnRemoveEvent = new RelayCommand<object>(RemoveEvent);
       BtnSave = new RelayCommand<object>(OnBtnSaveCmd);
-      BtnOpen = new RelayCommand<object>(OnBtnOpenCmd);      
+      BtnOpen = new RelayCommand<object>(OnBtnOpenCmd);
+      ((INotifyCollectionChanged)EventCollection).CollectionChanged += DeleteEventHandler;
     }
 
     private ObservableCollection<Event> _eventCollection = new();
@@ -37,17 +37,28 @@ namespace GenerateEventXML.ViewModels
       }
     }
 
+    private void DeleteEventHandler(object? sender, NotifyCollectionChangedEventArgs e)
+    {
+      if (e.Action == NotifyCollectionChangedAction.Add)
+      {
+        foreach (var item in e.NewItems?.OfType<Event>() ?? Enumerable.Empty<Event>())
+        {
+          item.DeleteEventClicked += RemoveEvent;
+        }
+      }
+      else if (e.Action == NotifyCollectionChangedAction.Remove)
+      {
+        foreach (var item in e.OldItems?.OfType<Event>() ?? Enumerable.Empty<Event>())
+        {
+          item.DeleteEventClicked -= RemoveEvent;
+        }
+      }
+    }
     private string _dateTimeStartImport = DateTime.Now.ToString(ConfigData.DateFormat);
     private string _copyright = $"Copyright © {DateTime.Now.Year} nemicomp. All rights reserved. Developed and designed by Michael Neuhaus, licensed under the MIT license. Version: {GetVersion()}";
     public string Copyright { get => _copyright; set => _copyright = value; }
 
     public ICommand BtnAddOne
-    {
-      get;
-      private set;
-    }
-
-    public ICommand BtnRemoveEvent
     {
       get;
       private set;
@@ -67,17 +78,14 @@ namespace GenerateEventXML.ViewModels
     public string DateTimeStartImport
     {
       get => _dateTimeStartImport;
-        set
+      set
       {
         _dateTimeStartImport = value;
       }
     }
 
 
-    private static string? GetVersion()
-    {
-      return System.Reflection.Assembly.GetEntryAssembly()?.GetName()?.Version?.ToString();
-    }
+    private static string? GetVersion() => System.Reflection.Assembly.GetEntryAssembly()?.GetName()?.Version?.ToString();
 
     private void AddTextBox(object? parameter = null)
     {
@@ -85,17 +93,12 @@ namespace GenerateEventXML.ViewModels
     }
 
     /// <summary>
-    /// removes all selected events in the collection
+    /// removes the event in the collection
     /// </summary>
     /// <param name="obj"></param>
-    private void RemoveEvent(object obj)
+    private void RemoveEvent(object? obj, EventArgs e)
     {
-      var eventsToRemove = EventCollection.Where(e => e.ToDeleteSelected).ToList();
-
-      foreach (var e in eventsToRemove)
-      {
-        EventCollection.Remove(e);
-      }
+      EventCollection.Remove(EventCollection.Where(e => e.ToDeleteSelected).First());
     }
 
     /// <summary>
@@ -121,6 +124,7 @@ namespace GenerateEventXML.ViewModels
         {
           ShowNotification("Warning", "Import start date not correct! Taking today", NotificationType.Warning, 5);
         }
+        // clear the current EventCollection before import
         EventCollection.Clear();
         foreach (var entry in IcalImportHandler.ImportFile(File.ReadAllText(dlg.FileName), startImportDate, ConfigData.ImportKeyword))
         {
@@ -135,72 +139,14 @@ namespace GenerateEventXML.ViewModels
     /// <param name="obj"></param>
     private void OnBtnSaveCmd(object obj)
     {
-      bool showError = true;
-      //do not add events without titel
-      List<Event> events = new();
-      foreach (var item in EventCollection)
+      if (SaveAndExportEvents.SaveEvent(EventCollection))
       {
-        if (item.EventTitle != null)
-        {
-          events.Add(item);
-        }
+        ShowNotification("Success", "Events saved successfully", NotificationType.Success);
       }
-
-      if (events.Count > 0 && ValidateDateTime())
-      {
-        //open filedialog to save file
-        SaveAndExportEvents sae = new();
-        SaveFileDialog saveFileDialog = new()
-        {
-          Filter = "ZIP files (*.zip)|*.zip"
-        };
-
-        if (saveFileDialog.ShowDialog() == true)
-        {
-          var fileName = saveFileDialog.FileName;
-          if (sae.SaveAndExport(events, fileName))
-          {
-            ShowNotification("Success", "Events saved successfully", NotificationType.Success);
-            showError = false;
-          }
-        }
-      }
-      if  (showError)
+      else
       {
         ShowNotification("Error", "Events not saved", NotificationType.Error, 5);
       }
-    }
-    /// <summary>
-    /// Validates DateTime Entry. If DateTime is not valid, it will throw an error notification
-    /// </summary>
-    /// <returns></returns>
-    private bool ValidateDateTime()
-    {
-      bool retVal = false;
-      foreach (var item in EventCollection)
-      {
-        try
-        {
-          if (item.DateTimeStart != null && item.DateTimeEnd != null)
-          {
-            DateTime.Parse(item.DateTimeStart);
-            DateTime.Parse(item.DateTimeEnd);
-            retVal = true;
-          }
-          else
-          {
-            ShowNotification("Error", "Datum ist NULL!", NotificationType.Error, 5);
-            retVal = false;
-          }
-        }
-        catch (Exception)
-        {
-          ShowNotification("Error", "Datum nicht korrekt eingegeben!", NotificationType.Error, 5);
-          retVal = false;
-          break;
-        }
-      }
-      return retVal;
     }
   }
 }

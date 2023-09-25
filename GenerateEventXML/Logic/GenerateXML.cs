@@ -14,7 +14,7 @@ namespace GenerateEventXML.Logic
     /// <param name="events"></param>
     /// <param name="fileName"></param>
     /// <returns></returns>
-    public static bool GenerateXMLFile(List<Event> events, string fileName)
+    public static bool GenerateXMLFile(IEnumerable<Event> events, string fileName)
     {
       bool retVal = false;
       try
@@ -50,7 +50,7 @@ namespace GenerateEventXML.Logic
           writer.WriteElementString("imic_custom_event_registration_target", "0");
           writer.WriteElementString("imic_event_frequency_type", "0");
           writer.WriteElementString("imic_event_day_month", "first");
-          writer.WriteElementString("imic_event_week_day","sunday");
+          writer.WriteElementString("imic_event_week_day", "sunday");
           writer.WriteElementString("imic_event_frequency", "35");
           writer.WriteElementString("imic_pages_Choose_slider_display", "2");
           writer.WriteElementString("imic_pages_banner_overlay", "0");
@@ -66,7 +66,7 @@ namespace GenerateEventXML.Logic
           writer.WriteElementString("imic_event_frequency_end", DateTime.Parse(e.DateTimeEnd).Date.ToString("yyyy-MM-dd"));
           writer.WriteElementString("imic_event_address2", e.SelectedLocation);
           writer.WriteElementString("_last_editor_used_jetpack", "classic-editor");
-          writer.WriteElementString("Status", "publish");          
+          writer.WriteElementString("Status", "publish");
           writer.WriteEndElement();
         }
 
