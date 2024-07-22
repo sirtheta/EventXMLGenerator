@@ -4,7 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Input;
-using TestCaseExecutor.Common;
+using GenerateEventXML.Common;
 
 namespace GenerateEventXML.MainClasses
 {

@@ -1,6 +1,6 @@
 ﻿using Notifications.Wpf.Core;
 using System;
-using TestCaseExecutor.Common;
+using GenerateEventXML.Common;
 
 namespace GenerateEventXML.ViewModels
 {

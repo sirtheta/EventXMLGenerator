@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel;
 using System.Runtime.CompilerServices;
 
-namespace TestCaseExecutor.Common
+namespace GenerateEventXML.Common
 {
   /// <summary>
   /// Implementation of INotifyPropertyChanged
