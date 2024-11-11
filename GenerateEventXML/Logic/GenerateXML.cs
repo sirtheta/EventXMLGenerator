@@ -1,4 +1,4 @@
-﻿using GenerateEventXML.MainClasses;
+﻿using GenerateEventXML.DomainModel;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -39,7 +39,7 @@ namespace GenerateEventXML.Logic
           writer.WriteElementString("identifyer", _idCounter.ToString());
           writer.WriteElementString("Title", e.EventTitle);
           writer.WriteElementString("Content", e.Content);
-          writer.WriteElementString("EventCategories", e.SelectedEventCategorie);
+          writer.WriteElementString("EventCategories", e.EventCategory);
           writer.WriteElementString("imic_strict_no_sidebar", "0");
           writer.WriteElementString("imic_sidebar_columns_layout", "3");
           writer.WriteElementString("imic_featured_event", "no");
@@ -64,7 +64,7 @@ namespace GenerateEventXML.Logic
           writer.WriteElementString("imic_pages_nivo_effects", "sliceDown");
           writer.WriteElementString("adore_ticket_status", "0");
           writer.WriteElementString("imic_event_frequency_end", DateTime.Parse(e.DateTimeEnd).Date.ToString("yyyy-MM-dd"));
-          writer.WriteElementString("imic_event_address2", e.SelectedLocation);
+          writer.WriteElementString("imic_event_address2", e.Location);
           writer.WriteElementString("_last_editor_used_jetpack", "classic-editor");
           writer.WriteElementString("Status", "publish");
           writer.WriteEndElement();

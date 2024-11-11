@@ -1,4 +1,4 @@
-﻿using GenerateEventXML.MainClasses;
+﻿using GenerateEventXML.DomainModel;
 using Microsoft.Win32;
 using Newtonsoft.Json;
 using System;
@@ -158,6 +158,7 @@ namespace GenerateEventXML.Logic
       }
       return success;
     }
+
     /// <summary>
     /// Validates DateTime Entry. If DateTime is not valid, it will return success false
     /// </summary>
